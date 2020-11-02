@@ -26,8 +26,6 @@ public class HttpServer2 {
 
             new Thread(()-> service(socket)).start();
         }
-
-
     }
 
     /**
