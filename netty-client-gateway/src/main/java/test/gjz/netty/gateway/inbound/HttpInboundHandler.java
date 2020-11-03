@@ -24,7 +24,7 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
         logger.info("{}, channelReadComplete, " ,LOGGER_HEAD);
-        ctx.flush();
+        //ctx.flush();
     }
 
     @Override

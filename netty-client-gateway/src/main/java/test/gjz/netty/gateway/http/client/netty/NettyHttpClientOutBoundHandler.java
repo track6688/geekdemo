@@ -6,9 +6,12 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 
 import java.util.concurrent.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.NO_CONTENT;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
+import static java.util.regex.Pattern.compile;
 
 /**
  * <pre>
@@ -33,8 +36,9 @@ public class NettyHttpClientOutBoundHandler {
     private NettyHttpClient nettyHttpClient;
 
     public NettyHttpClientOutBoundHandler(String serverUrl) {
+        this.port = getPort(serverUrl);
         this.serverUrl = serverUrl;
-        this.port = port;
+
 
         int cores = Runtime.getRuntime().availableProcessors() * 2;
         long keepAliveTime = 1000;
@@ -47,6 +51,26 @@ public class NettyHttpClientOutBoundHandler {
 
         nettyHttpClient = new NettyHttpClient(serverUrl, port);
     }
+
+    /**
+     * 从地地中取出端口号
+     * @param url
+     * @return
+     */
+    private int getPort(String url){
+
+        Pattern p = compile("(http|https):\\/\\/([a-zA-Z1-9]?[a-zA-Z0-9\\.]+)(:(\\d+))?");
+        Matcher m = p.matcher(url);
+
+        String value = "80";
+        if (m.find()) {
+            value = m.group(4);
+        }
+
+        return Integer.valueOf(value).intValue();
+    }
+
+
 
     /**
      * 处理请求
@@ -65,7 +89,7 @@ public class NettyHttpClientOutBoundHandler {
      * 发送Get请求
      */
     public void sendGetHttp(final ChannelHandlerContext ctx, final FullHttpRequest fullHttpRequest){
-        ctx.writeAndFlush(fullHttpRequest);
+
     }
 
 

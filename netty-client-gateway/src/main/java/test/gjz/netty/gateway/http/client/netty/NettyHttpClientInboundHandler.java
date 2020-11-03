@@ -38,6 +38,8 @@ public class NettyHttpClientInboundHandler extends ChannelInboundHandlerAdapter 
     public NettyHttpClientInboundHandler(String serverUrl, ChannelHandlerContext sourceContext, FullHttpRequest fullRequest) {
         this.serverUrl = serverUrl;
         handler = new NettyHttpClientOutBoundHandler(serverUrl);
+        this.sourceContext = sourceContext;
+        this.fullRequest = fullRequest;
     }
 
     /**
@@ -48,7 +50,7 @@ public class NettyHttpClientInboundHandler extends ChannelInboundHandlerAdapter 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         logger.info("{}, channelInactive, 连接上服务器：{}, 开始发送信息。。。。。" ,LOGGER_HEAD, serverUrl);
-        handler.sendGetHttp(ctx, fullRequest);
+        ctx.writeAndFlush(fullRequest);
     }
 
 
@@ -61,7 +63,7 @@ public class NettyHttpClientInboundHandler extends ChannelInboundHandlerAdapter 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         logger.info("{}, channelRead, 服务器{}, 已回应, 转发回去。。。。。" ,LOGGER_HEAD, serverUrl);
-        handler.handleResponse(sourceContext, (FullHttpResponse) msg);
+        //handler.handleResponse(sourceContext, (FullHttpResponse) msg);
     }
 }
 
