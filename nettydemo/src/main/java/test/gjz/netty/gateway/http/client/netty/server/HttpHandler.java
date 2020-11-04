@@ -1,4 +1,4 @@
-package netty.server;
+package test.gjz.netty.gateway.http.client.netty.server;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -33,7 +33,7 @@ public class HttpHandler extends ChannelInboundHandlerAdapter {
             //logger.info("channelRead流量接口请求开始，时间为{}", startTime);
             FullHttpRequest fullRequest = (FullHttpRequest) msg;
             String uri = fullRequest.uri();
-            //logger.info("接收到的请求url为{}", uri);
+            logger.info("接收到的请求url为{}", uri);
             if (uri.contains("/test")) {
                 handlerTest(fullRequest, ctx);
             }
@@ -45,7 +45,8 @@ public class HttpHandler extends ChannelInboundHandlerAdapter {
     private void handlerTest(FullHttpRequest fullRequest, ChannelHandlerContext ctx) {
         FullHttpResponse response = null;
         try {
-            String value = "hello,kimmking";
+            String userName = fullRequest.headers().get("nio");
+            String value = "Hello, " + userName;
             response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.wrappedBuffer(value.getBytes("UTF-8")));
             response.headers().set("Content-Type", "application/json");
             response.headers().setInt("Content-Length", response.content().readableBytes());

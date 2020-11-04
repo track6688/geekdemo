@@ -1,4 +1,4 @@
-package netty.server;
+package test.gjz.netty.gateway.http.client.netty.server;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

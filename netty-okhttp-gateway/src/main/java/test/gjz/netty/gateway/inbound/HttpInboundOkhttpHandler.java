@@ -8,15 +8,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import test.gjz.netty.gateway.outbound.okhttp.OkHttpOutboundHandler;
 
-public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
+public class HttpInboundOkhttpHandler extends ChannelInboundHandlerAdapter {
 
-    private static Logger logger = LoggerFactory.getLogger(HttpInboundHandler.class);
+    private static Logger logger = LoggerFactory.getLogger(HttpInboundOkhttpHandler.class);
     private final String proxyServer;
+
     private OkHttpOutboundHandler handler;
 
     private final String LOGGER_HEAD = "HttpInboundHandler";
-    
-    public HttpInboundHandler(String proxyServer) {
+
+    public HttpInboundOkhttpHandler(String proxyServer) {
         this.proxyServer = proxyServer;
         handler = new OkHttpOutboundHandler(this.proxyServer);
     }

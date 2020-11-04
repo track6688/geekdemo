@@ -13,6 +13,8 @@
         <module>nettydemo</module>
         <module>httpclientdemo</module>
         <module>netty-gateway</module>
+        <module>netty-okhttp-gateway</module>
+        <module>netty-client-gateway</module>
     </modules>
 
 

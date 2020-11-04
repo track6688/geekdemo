@@ -27,7 +27,7 @@ public class NettyServerApplication {
     
     public static void main(String[] args) {
         // 获取代理服务器地址，参数值，缺省为localhost:8802
-        String proxyServer = System.getProperty("proxyServer","http://localhost:8802");
+        String proxyServer = System.getProperty("proxyServer","http://localhost:8808");
         // 对外提供服务的端口， 缺省为9999
         String proxyPort = System.getProperty("proxyPort","9999");
 

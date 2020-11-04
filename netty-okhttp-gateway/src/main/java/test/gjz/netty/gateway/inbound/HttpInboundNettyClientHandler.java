@@ -6,17 +6,32 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import test.gjz.netty.gateway.http.client.netty.NettyHttpClientOutBoundHandler;
+import test.gjz.netty.gateway.outbound.netty4.NettyHttpClientOutBoundHandler;
+import test.gjz.netty.gateway.outbound.okhttp.OkHttpOutboundHandler;
 
-public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
+/**
+ *
+ * <pre>
+ * 使用Netty客户端处理请求
+ * </pre>
+ * @author guojz
+ * @version 1.00.00
+ * @createDate 2020/11/4
+ * <pre>
+ * 修改记录
+ *    修改后版本:     修改人：  修改日期:     修改内容:
+ * </pre>
+ */
+public class HttpInboundNettyClientHandler extends ChannelInboundHandlerAdapter {
 
-    private static Logger logger = LoggerFactory.getLogger(HttpInboundHandler.class);
+    private static Logger logger = LoggerFactory.getLogger(HttpInboundNettyClientHandler.class);
     private final String proxyServer;
+
     private NettyHttpClientOutBoundHandler handler;
 
-    private final String LOGGER_HEAD = "HttpInboundHandler";
-    
-    public HttpInboundHandler(String proxyServer) {
+    private final String LOGGER_HEAD = "[使用Netty客户端处理请求]";
+
+    public HttpInboundNettyClientHandler(String proxyServer) {
         this.proxyServer = proxyServer;
         handler = new NettyHttpClientOutBoundHandler(this.proxyServer);
     }

@@ -82,17 +82,6 @@ public class NettyHttpClientOutBoundHandler {
     }
 
 
-
-
-
-    /**
-     * 发送Get请求
-     */
-    public void sendGetHttp(final ChannelHandlerContext ctx, final FullHttpRequest fullHttpRequest){
-
-    }
-
-
     /**
      * 处理服务端返回
      * @throws Exception

@@ -9,13 +9,9 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpUtil;
 import okhttp3.*;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.concurrent.FutureCallback;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import test.gjz.netty.gateway.factory.NamedThreadFactory;
 
 import java.io.IOException;
 import java.util.concurrent.*;
@@ -52,7 +48,8 @@ public class OkHttpOutboundHandler{
         int cores = Runtime.getRuntime().availableProcessors() * 2;
         long keepAliveTime = 1000;
         int queueSize = 2048;
-        RejectedExecutionHandler handler = new ThreadPoolExecutor.CallerRunsPolicy();//.DiscardPolicy();
+        //.DiscardPolicy();
+        RejectedExecutionHandler handler = new ThreadPoolExecutor.CallerRunsPolicy();
         proxyService = new ThreadPoolExecutor(cores, cores,
                 keepAliveTime, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(queueSize),
                 new NamedThreadFactory("proxyService"), handler);
@@ -115,12 +112,11 @@ public class OkHttpOutboundHandler{
         } finally {
             if (fullRequest != null) {
                 if (!HttpUtil.isKeepAlive(fullRequest)) {
-                    ctx.write(fullHttpResponse).addListener(ChannelFutureListener.CLOSE);
+                    ctx.writeAndFlush(fullHttpResponse).addListener(ChannelFutureListener.CLOSE);
                 } else {
-                    ctx.write(fullHttpResponse);
+                    ctx.writeAndFlush(fullHttpResponse);
                 }
             }
-            ctx.flush();
         }
 
     }

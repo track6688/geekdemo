@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>netty-okhttp-gateway</artifactId>
+    <artifactId>test.gjz.netty.gateway.http.client.netty-okhttp-gateway</artifactId>
 
 
     <properties>
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.45.Final</version>
+            <version>4.1.53.Final</version>
         </dependency>
 
         <dependency>

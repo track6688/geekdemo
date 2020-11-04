@@ -6,6 +6,7 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpRequestEncoder;
 import io.netty.handler.codec.http.HttpResponseDecoder;
 
 /**
@@ -28,20 +29,19 @@ public class NettyHttpClientInitializer extends ChannelInitializer<SocketChannel
      */
     private String serverUrl;
     private ChannelHandlerContext ctx;
-    private FullHttpRequest fullRequest;
 
-    public NettyHttpClientInitializer(String serverUrl, ChannelHandlerContext ctx, FullHttpRequest fullRequest) {
+    public NettyHttpClientInitializer(String serverUrl, ChannelHandlerContext ctx) {
         this.serverUrl = serverUrl;
         this.ctx = ctx;
-        this.fullRequest = fullRequest;
     }
 
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
         pipeline.addLast(new HttpResponseDecoder())
+                .addLast(new HttpRequestEncoder())
                 .addLast(new HttpObjectAggregator(1024 * 1024))
-                .addLast(new NettyHttpClientInboundHandler(serverUrl, ctx, fullRequest));
+                .addLast(new NettyHttpClientInboundHandler(serverUrl, ctx));
     }
 }
 

@@ -5,7 +5,10 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpMethod;
+import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.string.StringDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,36 +64,13 @@ public class NettyHttpClient {
             Bootstrap bootstrap = new Bootstrap();
             bootstrap.group(eventLoopGroup);
             bootstrap.channel(NioSocketChannel.class)
-                    .handler(new NettyHttpClientInitializer(serverUrl, ctx, fullRequest));
+                    .handler(new NettyHttpClientInitializer(serverUrl, ctx));
 
             ChannelFuture future = bootstrap.connect(getServerUrl(serverUrl), port).sync();
-            logger.info("{}, clientHandle, 客户端已启动, 可以发送消息了。。。。。。" ,LOGGER_HEAD);
-            // 等待， 直接连接关闭
-            future.channel().closeFuture().sync();
+            logger.info("{}, clientHandle, 客户端已启动" ,LOGGER_HEAD);
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }finally {
-            eventLoopGroup.shutdownGracefully();
-        }
-    }
+            future.channel().writeAndFlush(fullRequest);
 
-    public static void main(String[] args) {
-        EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
-        try {
-            Bootstrap bootstrap = new Bootstrap();
-            bootstrap.group(eventLoopGroup);
-            bootstrap.channel(NioSocketChannel.class)
-                    .handler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            ChannelPipeline pipeline = socketChannel.pipeline();
-                            pipeline.addLast(new StringDecoder());
-                        }
-                    });
-
-            ChannelFuture future = bootstrap.connect("localhost", 8802).sync();
-            logger.info("{}, clientHandle, 客户端已启动, 可以发送消息了。。。。。。" ,"aaaa");
             // 等待， 直接连接关闭
             future.channel().closeFuture().sync();
 
